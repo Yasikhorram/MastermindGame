@@ -7,18 +7,27 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 function App() {
   const [num, setNum] = useState(null);
-  const URL = "https://www.random.org/clients/http/api/";
+  const URL =
+    "https://www.random.org/integers/?num=4&min=0&max=7&col=1&base=10&format=plain&rnd=new";
 
-  useEffect(() => {
-    axios.get(URL).then((response) => {
-      setNum(response.data);
-      console.log("num is: ", num);
-    });
-  }, [URL]);
+  const getRandomNum = () => {
+    axios
+      .get(URL)
+      .then((response) => {
+        const myData = response.data;
+        const newArr = myData.split("");
+        const filtered = newArr.filter((item) => item !== "\n").join("");
+        setNum(filtered);
+        console.log(num);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <div className="App">
-      Testing
+      <button onClick={getRandomNum}>click me</button>
       <Router>
         <Header />
         <button>
