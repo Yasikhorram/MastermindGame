@@ -7,9 +7,16 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 function App() {
   const [dig1, setDig1] = useState("");
-
   const [guess1, setGuess1] = useState("");
   const [num, setNum] = useState(0);
+  const [isToggle, setToggle] = useState(false);
+
+  const [test, setTest] = useState("");
+
+  const feed1 = "Hooray!!! You won!!";
+  const feed2 = "You guessed a correct number and its correct location";
+  const feed3 = "You guessed a correct number ";
+  const feed4 = "guess was incorrect";
 
   const getRandomNum = () => {
     axios
@@ -34,66 +41,56 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     setGuess1(dig1);
-
     console.log("guess1 is: ", dig1, "num is: ", num);
+    setTest("");
+
     if (dig1 === num) {
-      alert("Hooooooray!! You WON!!");
-    }
-    for (let number of dig1) {
-      if (num.indexOf(number) && num.indexOf(number) === dig1.indexOf(number)) {
-        console.log("You guessed a correct number and its correct location");
-        return;
-      } else if (num.indexOf(number)) {
-        console.log("You guessed a correct number ");
-        return;
-      } else {
-        console.log("guess was incorrect");
-        return;
+      setTest(feed1);
+    } else {
+      for (let number of dig1) {
+        if (
+          num.indexOf(number) >= 0 &&
+          num.indexOf(number) === dig1.indexOf(number)
+        ) {
+          console.log("iam in both");
+          setTest(feed2);
+          return;
+        } else if (num.indexOf(number) >= 0) {
+          console.log("iam only exist->", num.indexOf(number));
+
+          setTest(feed3);
+          return;
+        }
       }
+      setTest(feed4);
     }
+  };
+
+  const handleGame = (e) => {
+    setToggle(!isToggle);
   };
 
   return (
     <div className="App">
-      <button onClick={getRandomNum}>click me</button>
-      <form>
-        <input
-          type="text"
-          required
-          className="circle"
-          value={dig1}
-          onChange={(e) => setDig1(e.target.value)}
-        />
+      <Header />
+      <button className="game" onClick={handleGame}>
+        Game
+      </button>
 
-        <button type="submit" onClick={handleSubmit}>
-          check
-        </button>
-      </form>
-
-      <Router>
-        <Header />
-        <button>
-          <Link to="/game">Game</Link>
-        </button>
-        <br></br>
-
-        <br></br>
-        <button>
-          <Link to="/rules">Rules</Link>
-        </button>
-
-        <Routes>
-          <Route
-            path="/game"
-            element={<Game />}
-            dig1={dig1}
-            setDig1={setDig1}
-          />
-          <Route path="/rules" element={<Rules />} />
-        </Routes>
-      </Router>
+      <Game
+        dig1={dig1}
+        setDig1={setDig1}
+        feed1={feed1}
+        feed2={feed2}
+        feed3={feed3}
+        feed4={feed4}
+        test={test}
+        handleSubmit={handleSubmit}
+        getRandomNum={getRandomNum}
+        isToggle={isToggle}
+      />
+      <Rules />
     </div>
   );
 }
