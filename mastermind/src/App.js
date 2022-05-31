@@ -12,16 +12,27 @@ const GameButton = styled(Button)({
   fontSize: 20,
   padding: "12px 12px",
   backgroundColor: "#7834FF",
-  width: 800,
+  width: 700,
   marginLeft: 50,
-  marginTop: 100,
+  marginTop: 200,
+
+  "&:hover": {
+    backgroundColor: "#D9D9D9",
+    borderColor: "#0062cc",
+    boxShadow: "none",
+  },
 });
 const RuleButton = styled(Button)({
   fontSize: 20,
   padding: "12px 12px",
   backgroundColor: "#7834FF",
-  width: 800,
+  width: 700,
   marginLeft: 50,
+  "&:hover": {
+    backgroundColor: "#D9D9D9",
+    borderColor: "#0062cc",
+    boxShadow: "none",
+  },
 });
 
 function App() {
@@ -29,6 +40,7 @@ function App() {
   const [guess1, setGuess1] = useState("");
   const [num, setNum] = useState(0);
   const [isToggle, setToggle] = useState(false);
+  const [ruleToggle, setRuleToggle] = useState(false);
 
   const [test, setTest] = useState("");
 
@@ -87,10 +99,14 @@ function App() {
   const handleGame = (e) => {
     setToggle(!isToggle);
   };
+  const handleRules = (e) => {
+    setRuleToggle(!ruleToggle);
+  };
 
   return (
     <div className="App">
       <Header />
+
       <div className="container">
         <GameButton
           variant="contained"
@@ -118,13 +134,13 @@ function App() {
           variant="contained"
           color="secondary"
           size="large"
-          onClick={handleGame}
+          onClick={handleRules}
           style={{ marginBottom: "2em", display: "block" }}
         >
           {" "}
           Rules
         </RuleButton>
-        <Rules />
+        <Rules ruleToggle={ruleToggle} />
       </div>
     </div>
   );
