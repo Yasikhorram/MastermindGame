@@ -57,8 +57,6 @@ function App() {
           setTest(feed2);
           return;
         } else if (num.indexOf(number) >= 0) {
-          console.log("iam only exist->", num.indexOf(number));
-
           setTest(feed3);
           return;
         }
