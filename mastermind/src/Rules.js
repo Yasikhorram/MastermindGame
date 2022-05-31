@@ -1,9 +1,5 @@
 function Rules() {
-  return (
-    <div>
-      <button>Rules</button>
-    </div>
-  );
+  return <div>I am a div</div>;
 }
 
 export default Rules;

@@ -4,6 +4,25 @@ import Rules from "./Rules";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Button from "@mui/material/Button";
+
+import { styled } from "@mui/material/styles";
+
+const GameButton = styled(Button)({
+  fontSize: 20,
+  padding: "12px 12px",
+  backgroundColor: "#7834FF",
+  width: 800,
+  marginLeft: 50,
+  marginTop: 100,
+});
+const RuleButton = styled(Button)({
+  fontSize: 20,
+  padding: "12px 12px",
+  backgroundColor: "#7834FF",
+  width: 800,
+  marginLeft: 50,
+});
 
 function App() {
   const [dig1, setDig1] = useState("");
@@ -72,23 +91,41 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <button className="game" onClick={handleGame}>
-        Game
-      </button>
+      <div className="container">
+        <GameButton
+          variant="contained"
+          color="secondary"
+          size="large"
+          onClick={handleGame}
+          style={{ marginBottom: "2em" }}
+        >
+          Game
+        </GameButton>
 
-      <Game
-        dig1={dig1}
-        setDig1={setDig1}
-        feed1={feed1}
-        feed2={feed2}
-        feed3={feed3}
-        feed4={feed4}
-        test={test}
-        handleSubmit={handleSubmit}
-        getRandomNum={getRandomNum}
-        isToggle={isToggle}
-      />
-      <Rules />
+        <Game
+          dig1={dig1}
+          setDig1={setDig1}
+          feed1={feed1}
+          feed2={feed2}
+          feed3={feed3}
+          feed4={feed4}
+          test={test}
+          handleSubmit={handleSubmit}
+          getRandomNum={getRandomNum}
+          isToggle={isToggle}
+        />
+        <RuleButton
+          variant="contained"
+          color="secondary"
+          size="large"
+          onClick={handleGame}
+          style={{ marginBottom: "2em", display: "block" }}
+        >
+          {" "}
+          Rules
+        </RuleButton>
+        <Rules />
+      </div>
     </div>
   );
 }
