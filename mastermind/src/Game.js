@@ -1,19 +1,6 @@
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 
-const GameButton = styled(Button)({
-  fontSize: 20,
-  padding: "12px 12px",
-  backgroundColor: "#A6A6A6",
-  width: 200,
-  color: "white",
-  "&:hover": {
-    backgroundColor: "#D9D9D9",
-    borderColor: "#0062cc",
-    boxShadow: "none",
-  },
-});
-
 const CheckButton = styled(Button)({
   fontSize: 20,
   padding: "3px",
@@ -39,14 +26,12 @@ function Game({
   feed4,
   handleSubmit,
   test,
-  getRandomNum,
   isToggle,
 }) {
   return (
     <div>
       {isToggle && (
-        <div classname="center">
-          <GameButton onClick={getRandomNum}>Start the game</GameButton>
+        <div className="center">
           <form className="gameContainer">
             <br></br>
             <input
@@ -59,10 +44,10 @@ function Game({
             <CheckButton type="submit" onClick={handleSubmit}>
               check
             </CheckButton>
-            {test === feed1 ? <span>{feed1}</span> : ""}
-            {test === feed2 ? <span>{feed2}</span> : ""}
-            {test === feed3 ? <span>{feed3}</span> : ""}
-            {test === feed4 ? <span>{feed4}</span> : ""}
+            {test === feed1 ? <span className="box">{feed1}</span> : ""}
+            {test === feed2 ? <span className="box">{feed2}</span> : ""}
+            {test === feed3 ? <span className="box">{feed3}</span> : ""}
+            {test === feed4 ? <span className="box">{feed4}</span> : ""}
           </form>
         </div>
       )}

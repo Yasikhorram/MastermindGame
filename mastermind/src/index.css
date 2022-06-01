@@ -40,5 +40,30 @@ input {
 }
 
 ul {
-  list-style-type: square;
+  list-style: none;
+}
+li {
+  padding: 20px 10px;
+  background-color: #d9d9d9;
+  border: 0.5px solid white;
+  border-radius: 5px;
+  box-shadow: 8px 4px 10px #6849d3;
+  color: #6849d3;
+  font-size: 20px;
+  font-family: "Overpass", sans-serif;
+  font-family: "Roboto", sans-serif;
+}
+
+.feedback {
+  font-family: "Bebas Neue", cursive;
+  font-family: "Roboto", sans-serif;
+  font-family: "Russo One", sans-serif;
+  font-family: "Source Sans Pro", sans-serif;
+  font-family: "Urbanist", sans-serif;
+}
+span.box {
+  border: 3px solid #a6a6a6;
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 8px 4px 10px #6849d3;
 }
