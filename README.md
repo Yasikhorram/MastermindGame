@@ -2,9 +2,9 @@
 #### Let's find a number!
 This game is against computer. Computer will generates random number, 4digits, between 0-7, digits can be repeatable.
 
-Now user have 10 attempts to guess that number! It's fun.
+Now user have 10 attempts to guess that number!
 
-> Do you want to try? Follow this link:   [HERE](https://preeminent-dolphin-f37fad.netlify.app/)
+> Do you want to try? Follow this link and have fun:   [HERE](https://preeminent-dolphin-f37fad.netlify.app/)
 
 # Development
 - Install dependencies `npm install`
