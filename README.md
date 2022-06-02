@@ -4,7 +4,7 @@ This game is against computer. Computer will generates random number, 4digits, b
 
 Now user have 10 attempts to guess that number! It's fun.
 
-Do you want to try? Follow this link here:  [HERE](https://preeminent-dolphin-f37fad.netlify.app/)
+> Do you want to try? Follow this link:   [HERE](https://preeminent-dolphin-f37fad.netlify.app/)
 
 # Development
 - Install dependencies `npm install`
