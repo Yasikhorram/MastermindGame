@@ -1,17 +1,14 @@
 import Header from "./Header";
-import Game from "./Game";
 import Rules from "./Rules";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import Button from "@mui/material/Button";
 
+import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 
 import TextField from "@mui/material/TextField";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 
@@ -38,6 +35,7 @@ const GameButton = styled(Button)({
     boxShadow: "none",
   },
 });
+
 const RuleButton = styled(Button)({
   fontSize: 20,
   padding: "12px 12px",
@@ -51,11 +49,9 @@ const RuleButton = styled(Button)({
   },
 });
 
-const StartButton = styled(Button)({
-  fontSize: 20,
-  padding: "12px 12px",
-  backgroundColor: "#A6A6A6",
-  width: 200,
+const CheckButton = styled(Button)({
+  backgroundColor: "#6849d3",
+
   color: "white",
   "&:hover": {
     backgroundColor: "#D9D9D9",
@@ -70,19 +66,16 @@ const App = () => {
   const [isToggle, setToggle] = useState(false);
   const [ruleToggle, setRuleToggle] = useState(false);
   const [flipButton, setFlipButton] = useState(false);
-  const [test, setTest] = useState("");
+  const [open, setOpen] = useState(false);
+  const [confettiOpen, setConfettiOpen] = useState(false);
+
   const [history, setHistory] = useState([]);
   const [attempts, setAttempts] = useState(9);
+  const [confetti, setConfetti] = useState(false);
   const { width, height } = useWindowSize();
-  const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    console.log("Entry: " + entry);
-    console.log("Random number: " + num);
-    console.log(history);
-  }, [entry, num, history]);
+  const [historyShow, setHistoryShow] = useState(false); //History word
 
-  const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const feed1 = "Hooaaaaaaaray!!! You won!!";
   const feed2 =
     "You guessed a correct number and its correct location.  You can do this :)";
@@ -105,36 +98,44 @@ const App = () => {
       .catch((err) => {
         console.log(err);
       });
+    handleGame();
   };
 
   const handleSubmit = () => {
-    console.log("guess1 is: ", entry, "num is: ", num);
-    setTest("");
+    // console.log("guess1 is: ", entry, "num is: ", num);
+    setHistoryShow(true);
+
     setAttempts(attempts - 1);
     if (attempts === 0) {
       setOpen(true);
+      setHistoryShow(false);
+      setHistory([]);
+      setNum(0);
+      return;
     }
     if (entry === num) {
-      setTest(feed1);
+      setConfetti(true);
+      setConfettiOpen(true);
       writeHistory(attempts, entry, feed1);
+      setEntry("");
     } else {
       for (let number of entry) {
         if (
           num.indexOf(number) >= 0 &&
           num.indexOf(number) === entry.indexOf(number)
         ) {
-          console.log("iam in both");
-          setTest(feed2);
           writeHistory(attempts, entry, feed2);
+          setEntry("");
           return;
         } else if (num.indexOf(number) >= 0) {
-          setTest(feed3);
           writeHistory(attempts, entry, feed3);
+          setEntry("");
           return;
         }
       }
-      setTest(feed4);
+
       writeHistory(attempts, entry, feed4);
+      setEntry("");
     }
   };
 
@@ -142,7 +143,7 @@ const App = () => {
     setHistory([...history, { a, b, c }]);
   };
 
-  const handleGame = (e) => {
+  const handleGame = () => {
     setToggle(!isToggle);
     setFlipButton(!flipButton);
   };
@@ -151,8 +152,23 @@ const App = () => {
     setRuleToggle(!ruleToggle);
   };
 
+  const restartGame = () => {
+    getRandomNum();
+    setAttempts(9);
+    setHistory([]);
+    setNum(0);
+    setHistoryShow(false);
+  };
+
   const handleClose = () => {
     setOpen(false);
+    restartGame();
+  };
+
+  const handleCloseConfetti = () => {
+    setConfettiOpen(false);
+    setConfetti(false);
+    restartGame();
   };
 
   return (
@@ -164,31 +180,33 @@ const App = () => {
           variant="contained"
           color="secondary"
           size="large"
-          onClick={handleGame}
           style={{ marginBottom: "2em" }}
+          onClick={getRandomNum}
         >
           Game
         </GameButton>
 
         {flipButton ? (
           <>
-            <StartButton onClick={getRandomNum}>Start The Game</StartButton>
             <br />
             <>
               <TextField
                 id="outlined-basic"
                 label="Enter the number"
                 variant="outlined"
+                value={entry}
                 onChange={(e) => setEntry(e.target.value)}
               />
               <br />
-              <Button variant="outlined" onClick={handleSubmit}>
-                Submit the answer
-              </Button>
-              <>{num === entry && <Confetti width={width} height={height} />}</>
+              <CheckButton variant="outlined" onClick={handleSubmit}>
+                Check your answer
+              </CheckButton>
+              <>{confetti && <Confetti width={width} height={height} />}</>
               <br />
               <div>
-                History:<br></br>
+                {historyShow && <h3>History:</h3>}
+
+                <br></br>
                 {history
                   .map((item) => (
                     <Card sx={{ minWidth: 275 }}>
@@ -238,13 +256,32 @@ const App = () => {
           <DialogTitle id="alert-dialog-title">GAME OVER!</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Refresh the page and start over again.
+              Oh no! Refresh the page and start over again. Best of luck!
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>Disagree</Button>
             <Button onClick={handleClose} autoFocus>
-              Agree
+              Try Again
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
+      {confettiOpen && (
+        <Dialog
+          open={confettiOpen}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">Congratulations!</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              You guessed the correct number and You won!!!
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseConfetti} autoFocus>
+              Play Again
             </Button>
           </DialogActions>
         </Dialog>

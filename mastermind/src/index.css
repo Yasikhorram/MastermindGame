@@ -49,17 +49,16 @@ li {
   border-radius: 5px;
   box-shadow: 8px 4px 10px #6849d3;
   color: #6849d3;
-  font-size: 20px;
+  font-size: 16px;
   font-family: "Overpass", sans-serif;
   font-family: "Roboto", sans-serif;
 }
 
-.feedback {
-  font-family: "Bebas Neue", cursive;
+h3 {
+  font-size: 22px;
   font-family: "Roboto", sans-serif;
-  font-family: "Russo One", sans-serif;
-  font-family: "Source Sans Pro", sans-serif;
-  font-family: "Urbanist", sans-serif;
+  font-family: "Bebas Neue", cursive;
+  color: #6849d3;
 }
 span.box {
   border: 3px solid #a6a6a6;
