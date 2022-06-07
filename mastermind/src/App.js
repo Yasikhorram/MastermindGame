@@ -190,9 +190,9 @@ const App = () => {
   return (
     <div className="App">
       <Header />
-      <DataTable gameState={gameState} />
 
       <div className="container">
+        {flipButton && <DataTable gameState={gameState} />}
         <GameButton
           variant="contained"
           color="secondary"

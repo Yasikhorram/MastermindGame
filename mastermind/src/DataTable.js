@@ -28,8 +28,11 @@ const DataTable = ({ gameState }) => {
     },
   }));
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 100 }} size="small" aria-label="a dense table">
+    <TableContainer
+      component={Paper}
+      style={{ maxWidth: "300px", margin: "50px" }}
+    >
+      <Table sx={{ minWidth: 10 }} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
             <StyledTableCell>Game</StyledTableCell>
