@@ -1,7 +1,7 @@
 import Header from "./Header";
 import Rules from "./Rules";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 import Button from "@mui/material/Button";
@@ -20,6 +20,8 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+
+import DataTable from "./DataTable";
 
 const GameButton = styled(Button)({
   fontSize: 20,
@@ -61,20 +63,27 @@ const CheckButton = styled(Button)({
 });
 
 const App = () => {
-  const [entry, setEntry] = useState("");
   const [num, setNum] = useState(0);
-  const [isToggle, setToggle] = useState(false);
+  const [entry, setEntry] = useState("");
+  // const [isToggle, setToggle] = useState(false);
   const [ruleToggle, setRuleToggle] = useState(false);
   const [flipButton, setFlipButton] = useState(false);
   const [open, setOpen] = useState(false);
   const [confettiOpen, setConfettiOpen] = useState(false);
-
   const [history, setHistory] = useState([]);
   const [attempts, setAttempts] = useState(9);
   const [confetti, setConfetti] = useState(false);
   const { width, height } = useWindowSize();
-
   const [historyShow, setHistoryShow] = useState(false); //History word
+  const [count, setCount] = useState(1);
+
+  const [gameState, setGameState] = useState(
+    JSON.parse(localStorage.getItem("result")) || []
+  );
+
+  useEffect(() => {
+    localStorage.setItem("result", JSON.stringify(gameState));
+  }, [gameState]);
 
   const feed1 = "Hooaaaaaaaray!!! You won!!";
   const feed2 =
@@ -89,7 +98,9 @@ const App = () => {
       )
       .then((response) => {
         const myData = response.data;
+        console.log("response.data is: ", myData);
         const newArr = myData.split("");
+        console.log("newArr:", newArr);
         const filtered = newArr.filter((item) => item !== "\n").join("");
         setNum(filtered);
 
@@ -102,7 +113,7 @@ const App = () => {
   };
 
   const handleSubmit = () => {
-    // console.log("guess1 is: ", entry, "num is: ", num);
+    console.log("guess1 is: ", entry, "num is: ", num);
     setHistoryShow(true);
 
     setAttempts(attempts - 1);
@@ -110,7 +121,7 @@ const App = () => {
       setOpen(true);
       setHistoryShow(false);
       setHistory([]);
-      setNum(0);
+
       return;
     }
     if (entry === num) {
@@ -143,37 +154,43 @@ const App = () => {
     setHistory([...history, { a, b, c }]);
   };
 
-  const handleGame = () => {
-    setToggle(!isToggle);
-    setFlipButton(!flipButton);
+  const updateGameHistory = (count, didWin) => {
+    setGameState([...gameState, { count, didWin }]);
   };
 
-  const handleRules = (e) => {
+  const handleRules = () => {
     setRuleToggle(!ruleToggle);
+  };
+  const handleGame = () => {
+    setFlipButton(!flipButton);
   };
 
   const restartGame = () => {
     getRandomNum();
     setAttempts(9);
     setHistory([]);
-    setNum(0);
     setHistoryShow(false);
   };
 
   const handleClose = () => {
     setOpen(false);
     restartGame();
+    setCount(count + 1);
+    updateGameHistory(count, "lost");
   };
 
   const handleCloseConfetti = () => {
     setConfettiOpen(false);
     setConfetti(false);
     restartGame();
+    setCount(count + 1);
+    updateGameHistory(count, "won");
   };
 
   return (
     <div className="App">
       <Header />
+      <DataTable gameState={gameState} />
 
       <div className="container">
         <GameButton
@@ -191,6 +208,7 @@ const App = () => {
             <br />
             <>
               <TextField
+                type="number"
                 id="outlined-basic"
                 label="Enter the number"
                 variant="outlined"
@@ -256,7 +274,7 @@ const App = () => {
           <DialogTitle id="alert-dialog-title">GAME OVER!</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Oh no! Refresh the page and start over again. Best of luck!
+              Oh no! The computer generated number was: {num}. Best of luck!
             </DialogContentText>
           </DialogContent>
           <DialogActions>
